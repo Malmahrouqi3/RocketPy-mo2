@@ -372,6 +372,15 @@ You can also become a [sponsor](https://github.com/sponsors/RocketPy-Team) and h
 
 If you are actively using RocketPy in one of your projects, reaching out to our core team via [Discord](https://discord.gg/b6xYnNh) and providing feedback can help improve RocketPy a lot!
 
+
+
+
+
+
+
+
+
+
 And if you are interested in going one step further, please read the [development documentation](https://docs.rocketpy.org/en/latest/development/index.html) to learn more about how you can contribute to the development of this next-gen trajectory simulation solution for rocketry.
 
 ## License
