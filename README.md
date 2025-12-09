@@ -138,6 +138,9 @@ In order to run your first rocket trajectory simulation using RocketPy, you can 
 
 Otherwise, you may want to create your own script or your own notebook using RocketPy. To do this, let's see how to use RocketPy's four main classes:
 
+
+
+
 - `Environment` - Keeps data related to weather.
 - `Motor` - Subdivided into `SolidMotor`, `HybridMotor` and `LiquidMotor`. Keeps data related to rocket motors.
 - `Rocket` - Keeps data related to a rocket.
