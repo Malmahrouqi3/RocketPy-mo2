@@ -51,6 +51,7 @@ Attention: The newest changes should be on top -->
 
 ### Changed
 
+- DOC: Changelog Update 8 (Git housekeeping & Docs) [#17](https://github.com/RocketPy-Team/RocketPy/pull/17)
 - ENH: Refactor Flight class to improve time node handling and sensor/controllers [#843](https://github.com/RocketPy-Team/RocketPy/pull/843)
 
 ### Fixed
