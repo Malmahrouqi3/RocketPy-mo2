@@ -374,6 +374,16 @@ If you are actively using RocketPy in one of your projects, reaching out to our 
 
 And if you are interested in going one step further, please read the [development documentation](https://docs.rocketpy.org/en/latest/development/index.html) to learn more about how you can contribute to the development of this next-gen trajectory simulation solution for rocketry.
 
+
+
+
+
+
+
+
+
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/RocketPy-Team/RocketPy/blob/master/LICENSE) file for details
