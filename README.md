@@ -28,7 +28,7 @@ RocketPy is the next-generation trajectory simulation solution for High-Power Ro
 
 
 
-## Main features
+## Main features Of course
 
 1. **Nonlinear 6 Degrees of Freedom Simulations**
    - Rigorous treatment of mass variation effects
