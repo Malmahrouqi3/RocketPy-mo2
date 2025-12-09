@@ -1,4 +1,8 @@
 # Set PYTHON variable according to OS
+
+
+
+
 ifeq ($(OS),Windows_NT)
 	PYTHON=python
 else
