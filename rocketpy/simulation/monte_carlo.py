@@ -533,7 +533,9 @@ class MonteCarlo:
         max_simulations=10000, # Safety stop to prevent infinite loops
         batch_size=50
     ):
+        self.import_outputs(self.filename.with_suffix(".outputs.txt"))
         ci_width = float(0)
+        old_ci_width = float('inf')
         num_simulations = 0
         while (ci_width <= tolerance) or (max_simulations > num_simulations):
         # continue to add more flights till convergence reached
@@ -552,8 +554,9 @@ class MonteCarlo:
             self.set_num_of_loaded_sims()
             ci_width = float(ci.high - ci.low)
             num_simulations = num_simulations + batch_size
-            # print(f"Simulations: {num_simulations}, CI Width: {ci_width}")
-        return num_simulations, ci, ci_width
+            print(f"Simulations: {num_simulations}, CI Width: {np.min(ci_width, old_ci_width)} m")
+            old_ci_width = ci_width
+        return int(self.num_of_loaded_sims), ci, ci_width
         
     def __evaluate_flight_inputs(self, sim_idx):
         """Evaluates the inputs of a single flight simulation.
