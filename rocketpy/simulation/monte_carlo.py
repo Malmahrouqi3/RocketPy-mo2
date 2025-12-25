@@ -529,34 +529,66 @@ class MonteCarlo:
         self,
         target_attribute="apogee",
         target_confidence=0.95,
-        tolerance=20.0,  # The desired width of the CI
-        max_simulations=10000, # Safety stop to prevent infinite loops
-        batch_size=50
+        tolerance=30.0,  # The desired width of the CI
+        max_simulations=5000,  # Safety stop to prevent infinite loops
+        batch_size=50,
     ):
+        """Run simulations in batches until the confidence interval meets tolerance.
+
+        Notes
+        -----
+        ``simulate`` interprets ``number_of_simulations`` as the **total target**
+        when ``append=True``. To add more simulations cumulatively, this method
+        increases the target by ``batch_size`` each iteration.
+        """
+
+        if batch_size <= 0:
+            raise ValueError(f"batch_size must be positive, got {batch_size}")
+
+        # Load existing outputs/logs so num_of_loaded_sims and results are current.
         self.import_outputs(self.filename.with_suffix(".outputs.txt"))
-        ci_width = float(0)
-        old_ci_width = float('inf')
-        num_simulations = 0
-        while (ci_width <= tolerance) or (max_simulations > num_simulations):
-        # continue to add more flights till convergence reached
-            # self.simulate(number_of_simulations=batch_size, append=True)
-            self.simulate(number_of_simulations=batch_size,
+
+        best_ci_width = float("inf")
+        history_sims = []
+        history_ci = []
+
+        while self.num_of_loaded_sims < max_simulations:
+            target_total = min(self.num_of_loaded_sims + batch_size, max_simulations)
+
+            # Run up to the new total (cumulative) count.
+            self.simulate(
+                number_of_simulations=target_total,
                 append=True,
                 include_function_data=False,
                 parallel=True,
-                n_workers=8,)
+                n_workers=8,
+            )
 
-            ci = self.estimate_confidence_interval(attribute=target_attribute, confidence_level=target_confidence)
-            data = (np.array(self.results[target_attribute]),)
-            # ci_width = np.quantile(data, 1.0-(1.0-ci)/2.0) - np.quantile(data, 1.0-(1.0-ci)/2.0)
+            # Refresh results so CI is based on the latest outputs.
             self.import_outputs(self.filename.with_suffix(".outputs.txt"))
-            self.set_results()
-            self.set_num_of_loaded_sims()
+
+            # Need at least two samples to form a finite CI.
+            if target_attribute not in self.results or len(self.results[target_attribute]) < 2:
+                continue
+
+            ci = self.estimate_confidence_interval(
+                attribute=target_attribute,
+                confidence_level=target_confidence,
+            )
             ci_width = float(ci.high - ci.low)
-            num_simulations = num_simulations + batch_size
-            print(f"Simulations: {num_simulations}, CI Width: {np.min(ci_width, old_ci_width)} m")
-            old_ci_width = ci_width
-        return int(self.num_of_loaded_sims), ci, ci_width
+            best_ci_width = min(best_ci_width, ci_width)
+            history_sims.append(int(self.num_of_loaded_sims))
+            history_ci.append(ci_width)
+
+            print(
+                "Simulations: "
+                f"{self.num_of_loaded_sims}, CI Width: {ci_width} m"
+            )
+
+            if ci_width <= tolerance:
+                break
+
+        return int(self.num_of_loaded_sims), best_ci_width, history_sims, history_ci
         
     def __evaluate_flight_inputs(self, sim_idx):
         """Evaluates the inputs of a single flight simulation.
