@@ -525,6 +525,36 @@ class MonteCarlo:
 
         return res.confidence_interval
 
+    def simulate_convergence(
+        self,
+        target_attribute="apogee",
+        target_confidence=0.95,
+        tolerance=20.0,  # The desired width of the CI
+        max_simulations=10000, # Safety stop to prevent infinite loops
+        batch_size=50
+    ):
+        ci_width = float(0)
+        num_simulations = 0
+        while (ci_width <= tolerance) or (max_simulations > num_simulations):
+        # continue to add more flights till convergence reached
+            # self.simulate(number_of_simulations=batch_size, append=True)
+            self.simulate(number_of_simulations=batch_size,
+                append=True,
+                include_function_data=False,
+                parallel=True,
+                n_workers=8,)
+
+            ci = self.estimate_confidence_interval(attribute=target_attribute, confidence_level=target_confidence)
+            data = (np.array(self.results[target_attribute]),)
+            # ci_width = np.quantile(data, 1.0-(1.0-ci)/2.0) - np.quantile(data, 1.0-(1.0-ci)/2.0)
+            self.import_outputs(self.filename.with_suffix(".outputs.txt"))
+            self.set_results()
+            self.set_num_of_loaded_sims()
+            ci_width = float(ci.high - ci.low)
+            num_simulations = num_simulations + batch_size
+            # print(f"Simulations: {num_simulations}, CI Width: {ci_width}")
+        return num_simulations, ci, ci_width
+        
     def __evaluate_flight_inputs(self, sim_idx):
         """Evaluates the inputs of a single flight simulation.
 
