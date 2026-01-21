@@ -28,6 +28,7 @@ from rocketpy.tools import (
     find_obj_from_hash,
     parallel_axis_theorem_from_com,
 )
+from tests.fixtures.function.function_fixtures import controller_function
 
 
 # pylint: disable=too-many-instance-attributes, too-many-public-methods, too-many-instance-attributes
@@ -1910,6 +1911,42 @@ class Rocket:
         self.thrust_eccentricity_x = x
         self.thrust_eccentricity_y = y
         return self
+
+    def add_discrete_controller(self,
+                                controller_function,
+                                refresh_rate,
+                                interactive_objects=None,
+                                initial_observed_variables=None,
+                                name=None
+                                ):
+
+        controller = _Controller(
+        controller_function=controller_function,
+        sampling_rate=refresh_rate,
+        interactive_objects=interactive_objects,
+        initial_observed_variables=initial_observed_variables,
+        name=name)
+
+        self._add_controllers(controller)
+
+        return None
+
+    def add_continuous_controller(self,
+                                controller_function,
+                                interactive_objects=None,
+                                initial_observed_variables=None,
+                                name=None
+                                ):
+
+        controller = _Controller(
+            controller_function=controller_function,
+            sampling_rate=np.inf,
+            interactive_objects=interactive_objects,
+            initial_observed_variables=initial_observed_variables,
+            name=name)
+
+        self._add_controllers(controller)
+        return controller
 
     def draw(self, vis_args=None, plane="xz", *, filename=None):
         """Draws the rocket in a matplotlib figure.
