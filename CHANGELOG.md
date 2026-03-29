@@ -31,6 +31,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Attention: The newest changes should be on top -->
 
 ### Added
+
+- 
+
+### Changed
+
+- 
+
+### Fixed
+
+- 
+
+## [v1.12.0] - 2026-03-08
+
+### Added
+
 - TST: Add acceptance tests for 3DOF flight simulation based on Bella Lui rocket [#914] (https://github.com/RocketPy-Team/RocketPy/pull/914_
 - ENH: Add background map auto download functionality to Monte Carlo plots [#896](https://github.com/RocketPy-Team/RocketPy/pull/896)
 - MNT: net thrust addition to 3 dof in flight class [#907] (https://github.com/RocketPy-Team/RocketPy/pull/907)
@@ -50,16 +65,23 @@ Attention: The newest changes should be on top -->
 
 ### Changed
 
+- ENH: Improve multi-variable drag compatibility, regular-grid handling, and related tests/docs [#927](https://github.com/RocketPy-Team/RocketPy/pull/927/changes)
 - ENH: replace if elif else chains with match statement [#921](https://github.com/RocketPy-Team/RocketPy/pull/921/changes)
 - ENH: Refactor Flight class to improve time node handling and sensor/controllers [#843](https://github.com/RocketPy-Team/RocketPy/pull/843)
 
 ### Fixed
 
+- BUG: Restore `Rocket.power_off_drag` and `Rocket.power_on_drag` as `Function` objects while preserving raw inputs in `power_off_drag_input` and `power_on_drag_input` [#941](https://github.com/RocketPy-Team/RocketPy/pull/941)
+- BUG: Add explicit timeouts to ThrustCurve API requests [#935](https://github.com/RocketPy-Team/RocketPy/pull/935)
+- BUG: Fix hard-coded radius value for parachute added mass calculation [#889](https://github.com/RocketPy-Team/RocketPy/pull/889)
 - DOC: Fix documentation build [#908](https://github.com/RocketPy-Team/RocketPy/pull/908)
 - BUG: energy_data plot not working for 3 dof sims [[#906](https://github.com/RocketPy-Team/RocketPy/issues/906)]
 - BUG: Fix CSV column header spacing in FlightDataExporter [#864](https://github.com/RocketPy-Team/RocketPy/issues/864)
 - BUG: Fix parallel Monte Carlo simulation showing incorrect iteration count [#806](https://github.com/RocketPy-Team/RocketPy/pull/806)
-
+- BUG: Fix missing titles in roll parameter plots for fin sets [#934](https://github.com/RocketPy-Team/RocketPy/pull/934)
+- BUG: Duplicate _controllers in Flight.TimeNodes.merge() [#931](https://github.com/RocketPy-Team/RocketPy/pull/931)
+- BUG: Fix incorrect Jacobian in `only_radial_burn` branch of `SolidMotor.evaluate_geometry` [#935](https://github.com/RocketPy-Team/RocketPy/pull/935)
+- BUG: Add explicit timeouts to ThrustCurve API requests [#935](https://github.com/RocketPy-Team/RocketPy/pull/935)
 
 ## [v1.11.0] - 2025-11-01
 
