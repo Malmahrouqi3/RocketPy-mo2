@@ -30,7 +30,7 @@ from rocketpy.tools import (
     find_obj_from_hash,
     parallel_axis_theorem_from_com,
 )
-from tests.fixtures.function.function_fixtures import controller_function
+# from tests.fixtures.function.function_fixtures import controller_function
 
 
 # pylint: disable=too-many-instance-attributes, too-many-public-methods, too-many-instance-attributes
