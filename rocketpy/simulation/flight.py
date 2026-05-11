@@ -787,6 +787,20 @@ class Flight:
                     if verbose:
                         print(f"Current Simulation Time: {self.t:3.4f} s", end="\r")
 
+                    # Continuous controllers: fire once per integrator step,
+                    # using the actual step Δt set by the solver rather than a
+                    # fixed sampling rate. state_history excludes the just
+                    # integrated point so its semantics match the discrete path
+                    # (state_history[-1] == previous state).
+                    for controller in self._continuous_controllers:
+                        controller(
+                            self.t,
+                            self.y_sol,
+                            self.solution[:-1],
+                            self.sensors,
+                            self.env,
+                        )
+
                     if self.__check_simulation_events(phase, phase_index, node_index):
                         break  # Stop if simulation termination event occurred
 
@@ -1583,8 +1597,21 @@ class Flight:
             )
 
     def __init_controllers(self):
-        """Initialize controllers and sensors"""
+        """Initialize controllers and sensors.
+
+        Controllers with ``sampling_rate == math.inf`` are treated as
+        *continuous* controllers and are fired at every solver step (i.e.
+        at the integrator's natural step rate) instead of on a fixed
+        discrete sampling grid. All other controllers are *discrete* and
+        scheduled via the TimeNodes machinery.
+        """
         self._controllers = self.rocket._controllers[:]
+        self._continuous_controllers = [
+            c for c in self._controllers if math.isinf(c.sampling_rate)
+        ]
+        self._discrete_controllers = [
+            c for c in self._controllers if not math.isinf(c.sampling_rate)
+        ]
         self.sensors = self.rocket.sensors.get_components()
 
         # reset controllable object to initial state (only airbrakes for now)

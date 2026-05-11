@@ -1981,7 +1981,7 @@ class Rocket:
 
         controller = _Controller(
             controller_function=controller_function,
-            sampling_rate=np.inf,
+            sampling_rate=math.inf,
             interactive_objects=interactive_objects,
             initial_observed_variables=initial_observed_variables,
             name=name)

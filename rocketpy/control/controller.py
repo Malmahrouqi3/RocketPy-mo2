@@ -1,3 +1,4 @@
+import math
 from inspect import signature
 from typing import Iterable
 
@@ -11,13 +12,19 @@ class _Controller:
     have a controller function that is called at a specified sampling rate
     during the simulation. The controller function can access and modify
     the objects that are passed to it. The controller function also stores the
-    variables of interest in the objects that are passed to it."""
+    variables of interest in the objects that are passed to it.
+
+    The default operating mode is **continuous**: when ``sampling_rate`` is
+    left unspecified (or set to ``math.inf``) the controller is fired once
+    per ODE integrator step rather than on a fixed discrete time grid. Pass
+    a finite ``sampling_rate`` (in Hz) to switch to a discrete schedule.
+    """
 
     def __init__(
         self,
         interactive_objects,
         controller_function,
-        sampling_rate,
+        sampling_rate=math.inf,
         initial_observed_variables=None,
         name="Controller",
     ):
