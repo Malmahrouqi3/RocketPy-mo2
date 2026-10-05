@@ -276,3 +276,10 @@ class _Controller:
             obj, "_interactive_objects_hash", data.get("_interactive_objects_hash", [])
         )
         return obj
+
+    @staticmethod
+    def set_fin_angle(rocket, fin, angle, min_angle=-15.0, max_angle=15.0):
+        angle = max(min_angle, min(max_angle, float(angle)))
+        fin.cant_angle = angle
+        rocket.evaluate_surfaces_cp_to_cdm()
+        return angle
